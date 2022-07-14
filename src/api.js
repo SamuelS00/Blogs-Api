@@ -1,13 +1,16 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
-const ErrorMiddleware = require('./middleware/errorMiddleware');
-// ...
+const errorMiddleware = require('./middleware/errorMiddleware');
+const authRouter = require('./routes/auth.router');
 
 const app = express();
 
 app.use(express.json());
+app.use(bodyParser.json());
 
-app.use(ErrorMiddleware);
+app.use('/login', authRouter);
+app.use(errorMiddleware);
 // ...
 
 // É importante exportar a constante `app`,
