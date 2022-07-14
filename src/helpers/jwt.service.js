@@ -6,7 +6,7 @@ const { JWT_SECRET } = process.env;
 
 const createToken = (user) => {
     const token = jwt.sign({ data: { user } }, JWT_SECRET, {
-      expiresIn: '60m',
+      expiresIn: '15m',
       algorithm: 'HS256',
     });
 
