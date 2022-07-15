@@ -5,10 +5,9 @@ const { User } = require('../database/models/index');
 const { JWT_SECRET } = process.env;
 const UnauthorizedError = require('../errors/unauthorizedError');
 
-const { replyMessages, httpsStatusCode } = require('../helpers/index');
+const { replyMessages } = require('../helpers/index');
 
-const validateToken = async (req, res, next) => {
-    const token = req.headers.authorization;
+const validateToken = async (token) => {
     if (!token) throw UnauthorizedError(replyMessages.TOKEN_NOT_FOUND);
 
     try {
@@ -21,14 +20,19 @@ const validateToken = async (req, res, next) => {
     
         if (!user) throw UnauthorizedError(replyMessages.TOKEN_EXPIRED);
         
-        req.user = user;
-    
-        next();
+        return user;
     } catch (err) {
-        res.status(httpsStatusCode.UNAUTHORIZED).json(
-            { message: replyMessages.TOKEN_EXPIRED },
-        );
+        throw UnauthorizedError(replyMessages.TOKEN_EXPIRED);
     }
 };
 
-module.exports = validateToken;
+const createToken = (user) => {
+    const token = jwt.sign({ data: { user } }, JWT_SECRET, {
+      expiresIn: '15m',
+      algorithm: 'HS256',
+    });
+
+    return token;
+};
+
+module.exports = { validateToken, createToken };
