@@ -16,6 +16,7 @@ const validateToken = async (req, res, next) => {
 
     const user = await User.findOne(
         { where: { email: decoded.data.user.email } },
+        { attributes: { exclude: ['password'] } },
     );
 
     if (!user) {
