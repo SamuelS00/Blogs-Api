@@ -1,9 +1,9 @@
-const { httpsStutusCode } = require('../helpers/index');
+const { httpsStatusCode } = require('../helpers/index');
 
 function Conflict(message) {
     return {
       message,
-      statusCode: httpsStutusCode.CONFLICT,
+      statusCode: httpsStatusCode.CONFLICT,
       stack: Error().stack,
     };
 }

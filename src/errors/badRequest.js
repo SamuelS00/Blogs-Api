@@ -1,9 +1,9 @@
-const { httpsStutusCode } = require('../helpers/index');
+const { httpsStatusCode } = require('../helpers/index');
 
 function BadRequest(message) {
     return {
       message,
-      statusCode: httpsStutusCode.BadRequest,
+      statusCode: httpsStatusCode.BadRequest,
       stack: Error().stack,
     };
 }
