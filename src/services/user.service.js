@@ -1,5 +1,5 @@
 const { User } = require('../database/models/index');
-const { createToken } = require('../helpers/jwt.service');
+const { createToken } = require('./JWT.service');
 const { validateNewUser } = require('../helpers/validateBody');
 const Conflict = require('../errors/conflict');
 const { replyMessages } = require('../helpers');
