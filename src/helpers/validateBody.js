@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const BadRequest = require('../errors/badRequest');
-const { replyMessages } = require('./index');
+const replyMessages = require('./replyMessages');
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
