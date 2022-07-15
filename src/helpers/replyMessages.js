@@ -4,6 +4,7 @@ const replyMessages = {
   FIELDS_ARE_MISSING: 'Some required fields are missing',
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   USER_ALREADY_EXISTS: 'User already registered',
+  INVALID_FIELDS: 'Invalid fields',
 };
 
 module.exports = replyMessages;
