@@ -1,7 +1,9 @@
+const { httpsStutusCode } = require('../helpers/index');
+
 function Conflict(message) {
     return {
       message,
-      statusCode: 409,
+      statusCode: httpsStutusCode.CONFLICT,
       stack: Error().stack,
     };
 }

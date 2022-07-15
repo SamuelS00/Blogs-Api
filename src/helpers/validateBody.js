@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const BadRequest = require('../errors/badRequest');
+const { replyMessages } = require('./index');
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -16,7 +17,7 @@ const newUserSchema = Joi.object({
 const validateLogin = (email, password) => {
   const { error } = loginSchema.validate({ email, password });
 
-  if (error) throw BadRequest('Some required fields are missing');
+  if (error) throw BadRequest(replyMessages.FIELDS_ARE_MISSING);
 };
 
 const validateNewUser = (user) => {

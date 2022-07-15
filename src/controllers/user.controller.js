@@ -1,5 +1,5 @@
 const userService = require('../services/user.service');
-const httpStatusCode = require('../helpers/httpsStatusCode');
+const { httpStatusCode } = require('../helpers/index');
 
 const create = async (req, res, _next) => {
   const { displayName, email, password, image } = req.body;

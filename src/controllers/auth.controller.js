@@ -1,10 +1,8 @@
 const authServices = require('../services/auth.service');
-const httpStatusCode = require('../helpers/httpsStatusCode');
+const { httpStatusCode } = require('../helpers/index');
 
 const login = async (req, res, _next) => {
   const { email, password } = req.body;
-
-  console.log(email, password);
 
   const token = await authServices.login(email, password);
 
