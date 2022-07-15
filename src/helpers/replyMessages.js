@@ -3,6 +3,7 @@ const replyMessages = {
   TOKEN_EXPIRED: 'Expired or invalid token',
   FIELDS_ARE_MISSING: 'Some required fields are missing',
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
+  USER_ALREADY_EXISTS: 'User already registered',
 };
 
 module.exports = replyMessages;
