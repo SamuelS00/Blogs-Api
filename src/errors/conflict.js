@@ -1,4 +1,4 @@
-const { httpsStatusCode } = require('../helpers/index');
+const httpsStatusCode = require('../helpers/replyStatusCode');
 
 function Conflict(message) {
     return {
