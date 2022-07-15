@@ -5,7 +5,9 @@ const Conflict = require('../errors/conflict');
 const { replyMessages } = require('../helpers');
 
 const getAll = async () => {
-  const users = await User.findAll();
+  const users = await User.findAll(
+    { attributes: { exclude: ['password'] } },
+  );
 
   return users;
 };
