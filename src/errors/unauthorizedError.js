@@ -1,9 +1,9 @@
-const { httpsStutusCode } = require('../helpers/index');
+const { httpsStatusCode } = require('../helpers/index');
 
 function UnauthorizedError(message) {
     return {
       message,
-      statusCode: httpsStutusCode.UNAUTHORIZED,
+      statusCode: httpsStatusCode.UNAUTHORIZED,
       stack: Error().stack,
     };
 }
