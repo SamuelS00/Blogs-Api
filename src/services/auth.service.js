@@ -1,7 +1,8 @@
 const { User } = require('../database/models/index');
-const { createToken } = require('../helpers/jwt.service');
+const { createToken } = require('./JWT.service');
 const BadRequest = require('../errors/badRequest');
 const { validateLogin } = require('../helpers/validateBody');
+const replyMessages = require('../helpers/replyMessages');
 
 const login = async (email, password) => {
   validateLogin(email, password);
@@ -13,7 +14,7 @@ const login = async (email, password) => {
     },
   );
 
-  if (!user) throw BadRequest('Invalid fields');
+  if (!user) throw BadRequest(replyMessages.INVALID_FIELDS);
 
   return createToken(user);
 };
