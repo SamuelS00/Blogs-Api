@@ -1,8 +1,7 @@
 const { User } = require('../database/models/index');
 const { createToken } = require('./JWT.service');
 const { validateNewUser } = require('../helpers/validateBody');
-const Conflict = require('../errors/conflict');
-const NotFound = require('../errors/notFound');
+const { Conflict, NotFound } = require('../errors/index');
 const { replyMessages } = require('../helpers');
 
 const getAll = async () => {
