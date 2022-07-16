@@ -1,8 +1,9 @@
 const { Category } = require('../database/models/index');
-const { validateNewCategory } = require('../helpers/validateBody');
+const { validateBody } = require('../helpers/validateBody');
+const { newCategorieSchema } = require('../utils/joi.schemas');
 
 const create = async (name) => {
-  validateNewCategory(name);
+  validateBody(newCategorieSchema, { name });
   const newCategorie = await Category.create({ name });
 
   return newCategorie;

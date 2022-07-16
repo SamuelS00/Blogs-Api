@@ -1,8 +1,9 @@
 const { User } = require('../database/models/index');
 const { createToken } = require('./JWT.service');
-const { validateNewUser } = require('../helpers/validateBody');
+const { validateBody } = require('../helpers/validateBody');
 const { Conflict, NotFound } = require('../errors/index');
 const { replyMessages } = require('../helpers');
+const { newUserSchema } = require('../utils/joi.schemas');
 
 const getAll = async () => {
   const users = await User.findAll(
@@ -23,7 +24,8 @@ const getById = async (id) => {
 };
 
 const create = async (newUser) => {
-  validateNewUser(newUser);
+  validateBody(newUserSchema, newUser);
+
   const { email, displayName, image } = newUser;
   const user = await User.findOne({ where: { email } });
 

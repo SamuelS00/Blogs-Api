@@ -1,11 +1,16 @@
 const { User } = require('../database/models/index');
 const { createToken } = require('./JWT.service');
 const BadRequest = require('../errors/badRequest');
-const { validateLogin } = require('../helpers/validateBody');
+const { validateBody } = require('../helpers/validateBody');
 const replyMessages = require('../helpers/replyMessages');
+const { loginSchema } = require('../utils/joi.schemas');
 
 const login = async (email, password) => {
-  validateLogin(email, password);
+  validateBody(
+    loginSchema, 
+    { email, password }, 
+    replyMessages.FIELDS_ARE_MISSING,
+  );
 
   const user = await User.findOne(
     { 
