@@ -10,6 +10,15 @@ const getAll = async (req, res, _next) => {
   return res.status(httpsStatusCode.OK).json(users);
 };
 
+const getById = async (req, res, _next) => {
+  const token = req.headers.authorization;
+  const { id } = req.params;
+  req.user = await validateToken(token);
+  const user = await userService.getById(id);
+
+  return res.status(httpsStatusCode.OK).json(user);
+};
+
 const create = async (req, res, _next) => {
   const { displayName, email, password, image } = req.body;
   const token = await userService.create({ displayName, email, password, image });
@@ -17,4 +26,4 @@ const create = async (req, res, _next) => {
   return res.status(httpsStatusCode.CREATED).json({ token });
 };
 
-module.exports = { create, getAll };
+module.exports = { create, getAll, getById };
