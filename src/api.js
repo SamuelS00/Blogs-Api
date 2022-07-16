@@ -2,9 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const errorMiddleware = require('./middleware/error.middleware');
-const authRouter = require('./routes/auth.router');
-const userRouter = require('./routes/user.router');
-const categorieRouter = require('./routes/categorie.router');
+const { authRouter, userRouter, categorieRouter } = require('./routes/index');
 
 const app = express();
 
