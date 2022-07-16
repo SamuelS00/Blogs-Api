@@ -14,6 +14,10 @@ const newUserSchema = Joi.object({
   image: Joi.string(),
 });
 
+const newCategorieSchema = Joi.object({
+  name: Joi.string().required(),
+});
+
 const validateLogin = (email, password) => {
   const { error } = loginSchema.validate({ email, password });
 
@@ -26,4 +30,10 @@ const validateNewUser = (user) => {
   if (error) throw BadRequest(error.message);
 };
 
-module.exports = { validateLogin, validateNewUser };
+const validateNewCategory = (name) => {
+  const { error } = newCategorieSchema.validate({ name });
+
+  if (error) throw BadRequest(error.message);
+};
+
+module.exports = { validateLogin, validateNewUser, validateNewCategory };
