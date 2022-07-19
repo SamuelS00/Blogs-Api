@@ -2,11 +2,24 @@ const Sequelize = require('sequelize');
 const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
-const { BlogPost, PostCategory } = require('../database/models/index');
+const { BlogPost, PostCategory, Category, User } = require('../database/models/index');
 const { replyMessages: { FIELDS_ARE_MISSING } } = require('../helpers');
 const { validateBody } = require('../helpers/validateBody');
 const { newPostSchema } = require('../utils/joi.schemas');
 const { validateCategoryIds } = require('./categorie.service');
+
+const getAll = async () => {
+  const posts = await BlogPost.findAll(
+    { 
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
+    },
+  );
+
+  return posts;
+};
 
 const create = async (userId, title, content, categoryIds) => {
   await validateCategoryIds(categoryIds);
@@ -34,4 +47,4 @@ const create = async (userId, title, content, categoryIds) => {
   }
 };
 
-module.exports = { create };
+module.exports = { create, getAll };
