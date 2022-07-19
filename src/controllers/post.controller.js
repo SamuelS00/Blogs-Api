@@ -2,6 +2,15 @@ const postService = require('../services/post.service');
 const { httpsStatusCode } = require('../helpers/index');
 const { validateToken } = require('../services/JWT.service');
 
+const getAll = async (req, res, _next) => {
+  const token = req.headers.authorization;
+  req.user = await validateToken(token);
+
+  const posts = await postService.getAll();
+
+  return res.status(httpsStatusCode.OK).json(posts);
+};
+
 const create = async (req, res, _next) => {
   const token = req.headers.authorization;
   req.user = await validateToken(token);
@@ -13,4 +22,4 @@ const create = async (req, res, _next) => {
   return res.status(httpsStatusCode.CREATED).json(newPost);
 };
 
-module.exports = { create };
+module.exports = { create, getAll };
