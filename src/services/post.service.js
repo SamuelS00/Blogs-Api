@@ -3,6 +3,7 @@ const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
 const { BlogPost, PostCategory, Category, User } = require('../database/models/index');
+const NotFound = require('../errors/notFound');
 const { replyMessages: { FIELDS_ARE_MISSING } } = require('../helpers');
 const { validateBody } = require('../helpers/validateBody');
 const { newPostSchema } = require('../utils/joi.schemas');
@@ -19,6 +20,22 @@ const getAll = async () => {
   );
 
   return posts;
+};
+
+const getById = async (id) => {
+  const post = await BlogPost.findOne(
+    { 
+      where: { id },
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
+    },
+  );
+
+  if (!post) throw NotFound('Post does not exist');
+
+  return post;
 };
 
 const create = async (userId, title, content, categoryIds) => {
@@ -47,4 +64,4 @@ const create = async (userId, title, content, categoryIds) => {
   }
 };
 
-module.exports = { create, getAll };
+module.exports = { create, getAll, getById };
