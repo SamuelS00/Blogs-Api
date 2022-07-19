@@ -8,4 +8,6 @@ postRouter.post('/', rescue(postController.create));
 
 postRouter.get('/', rescue(postController.getAll));
 
+postRouter.get('/:id', rescue(postController.getById));
+
 module.exports = postRouter;
