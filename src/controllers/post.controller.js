@@ -11,6 +11,16 @@ const getAll = async (req, res, _next) => {
   return res.status(httpsStatusCode.OK).json(posts);
 };
 
+const getById = async (req, res, _next) => {
+  const token = req.headers.authorization;
+  req.user = await validateToken(token);
+  const { id } = req.params;
+
+  const post = await postService.getById(id);
+
+  return res.status(httpsStatusCode.OK).json(post);
+};
+
 const create = async (req, res, _next) => {
   const token = req.headers.authorization;
   req.user = await validateToken(token);
@@ -22,4 +32,4 @@ const create = async (req, res, _next) => {
   return res.status(httpsStatusCode.CREATED).json(newPost);
 };
 
-module.exports = { create, getAll };
+module.exports = { create, getAll, getById };
