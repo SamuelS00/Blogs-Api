@@ -39,6 +39,18 @@ const getById = async (id) => {
   return post;
 };
 
+const getByUserId = async (userId) => {
+  const post = await BlogPost.findAll(
+    { 
+      where: { userId },
+    },
+  );
+
+  if (!post) throw NotFound('Post does not exist');
+
+  return post;
+};
+
 const create = async (userId, title, content, categoryIds) => {
   await validateCategoryIds(categoryIds);
   validateBody(newPostSchema, { title, content, categoryIds }, FIELDS_ARE_MISSING);
@@ -99,4 +111,4 @@ const destroy = async (id, userId) => {
   });
 };
 
-module.exports = { create, getAll, getById, update, destroy };
+module.exports = { create, getAll, getById, update, destroy, getByUserId };
