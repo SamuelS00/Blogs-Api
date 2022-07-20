@@ -26,4 +26,13 @@ const create = async (req, res, _next) => {
   return res.status(httpsStatusCode.CREATED).json({ token });
 };
 
-module.exports = { create, getAll, getById };
+const destroy = async (req, res, _next) => {
+  const token = req.headers.authorization;
+  req.user = await validateToken(token);
+  const userId = req.user.dataValues.id;
+  await userService.destroy(userId);
+
+  res.status(httpsStatusCode.NO_CONTENT).end();
+};
+
+module.exports = { create, getAll, getById, destroy };
