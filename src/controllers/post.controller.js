@@ -32,4 +32,16 @@ const create = async (req, res, _next) => {
   return res.status(httpsStatusCode.CREATED).json(newPost);
 };
 
-module.exports = { create, getAll, getById };
+const update = async (req, res, _next) => {
+  const token = req.headers.authorization;
+  req.user = await validateToken(token);
+  const userId = req.user.dataValues.id;
+
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const updatedPost = await postService.update(id, userId, title, content);
+
+  return res.status(httpsStatusCode.OK).json(updatedPost);
+};
+
+module.exports = { create, getAll, getById, update };
