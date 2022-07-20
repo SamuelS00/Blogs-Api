@@ -1,4 +1,10 @@
-const { User } = require('../database/models/index');
+const Sequelize = require('sequelize');
+const config = require('../database/config/config');
+
+const sequelize = new Sequelize(config.development);
+const { User, BlogPost, PostCategory } = require('../database/models/index');
+
+const postService = require('./post.service');
 const { createToken } = require('./JWT.service');
 const { validateBody } = require('../helpers/validateBody');
 const { Conflict, NotFound } = require('../errors/index');
@@ -35,4 +41,25 @@ const create = async (newUser) => {
   return createToken(displayName, email, image);
 };
 
-module.exports = { create, getAll, getById };
+const destroy = async (userId) => {
+  const posts = await postService.getByUserId(userId);
+  const postIds = await posts.map((p) => p.dataValues.id);
+
+  await sequelize.transaction(async (t) => {
+    await Promise.all([ 
+      postIds.map((postId) => PostCategory.destroy({ where: { postId } })),
+    ]);
+
+    await BlogPost.destroy(
+      { where: { userId } },
+      { transaction: t },
+    );
+
+    await User.destroy(
+      { where: { id: userId } },
+      { transaction: t },
+    );
+  });
+};
+
+module.exports = { create, getAll, getById, destroy };
