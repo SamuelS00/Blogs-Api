@@ -1,6 +1,6 @@
 const httpsStatusCode = require('../helpers/replyStatusCode');
 
-function UnauthorizedError(message) {
+function Unauthorized(message) {
     return {
       message,
       statusCode: httpsStatusCode.UNAUTHORIZED,
@@ -8,4 +8,4 @@ function UnauthorizedError(message) {
     };
 }
   
-module.exports = UnauthorizedError;
+module.exports = Unauthorized;
