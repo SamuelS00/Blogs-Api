@@ -3,10 +3,10 @@ const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
 const { BlogPost, PostCategory, Category, User } = require('../database/models/index');
-const NotFound = require('../errors/notFound');
+const { NotFound, Unauthorized } = require('../errors/index');
 const { replyMessages: { FIELDS_ARE_MISSING } } = require('../helpers');
 const { validateBody } = require('../helpers/validateBody');
-const { newPostSchema } = require('../utils/joi.schemas');
+const { newPostSchema, updatePostSchema } = require('../utils/joi.schemas');
 const { validateCategoryIds } = require('./categorie.service');
 
 const getAll = async () => {
@@ -64,4 +64,17 @@ const create = async (userId, title, content, categoryIds) => {
   }
 };
 
-module.exports = { create, getAll, getById };
+const update = async (id, userId, title, content) => {
+  validateBody(updatePostSchema, { title, content }, FIELDS_ARE_MISSING);
+
+  const post = await getById(id);  
+  if (post.user.id !== userId) throw Unauthorized('Unauthorized user');
+
+  await BlogPost.update({ title, content }, { where: { id } });
+
+  const updatedPost = getById(id);
+
+  return updatedPost;
+};
+
+module.exports = { create, getAll, getById, update };
