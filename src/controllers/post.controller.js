@@ -44,4 +44,15 @@ const update = async (req, res, _next) => {
   return res.status(httpsStatusCode.OK).json(updatedPost);
 };
 
-module.exports = { create, getAll, getById, update };
+const destroy = async (req, res, _next) => {
+  const token = req.headers.authorization;
+  req.user = await validateToken(token);
+  const userId = req.user.dataValues.id;
+  
+  const { id } = req.params;
+  await postService.destroy(+id, userId);
+
+  return res.status(httpsStatusCode.NO_CONTENT).end();
+};
+
+module.exports = { create, getAll, getById, update, destroy };
