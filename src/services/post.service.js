@@ -3,6 +3,7 @@ const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
 const { BlogPost, PostCategory, Category, User } = require('../database/models/index');
+
 const { NotFound, Unauthorized } = require('../errors/index');
 const { replyMessages: { FIELDS_ARE_MISSING } } = require('../helpers');
 const { validateBody } = require('../helpers/validateBody');
@@ -70,11 +71,32 @@ const update = async (id, userId, title, content) => {
   const post = await getById(id);  
   if (post.user.id !== userId) throw Unauthorized('Unauthorized user');
 
-  await BlogPost.update({ title, content }, { where: { id } });
+  await BlogPost.update(
+    { title, content }, 
+    { where: { id } },
+  );
 
   const updatedPost = getById(id);
 
   return updatedPost;
 };
 
-module.exports = { create, getAll, getById, update };
+const destroy = async (id, userId) => {  
+  const post = await getById(id); 
+
+  if (post.dataValues.userId !== userId) throw Unauthorized('Unauthorized user');
+
+  await sequelize.transaction(async (t) => {
+      await PostCategory.destroy(
+        { where: { postId: id } },
+        { transaction: t },
+      );
+
+      await BlogPost.destroy(
+        { where: { id } },
+        { transaction: t },
+      );
+  });
+};
+
+module.exports = { create, getAll, getById, update, destroy };
