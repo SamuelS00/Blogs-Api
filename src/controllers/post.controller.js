@@ -55,4 +55,21 @@ const destroy = async (req, res, _next) => {
   return res.status(httpsStatusCode.NO_CONTENT).end();
 };
 
-module.exports = { create, getAll, getById, update, destroy };
+const search = async (req, res, _next) => {
+  const token = req.headers.authorization;
+  req.user = await validateToken(token);
+
+  const { q } = req.query;
+  const searchedPost = await postService.search(q);
+
+  return res.status(httpsStatusCode.OK).json(searchedPost);
+};
+
+module.exports = {
+  create,
+  getAll,
+  getById,
+  update,
+  destroy,
+  search,
+};
