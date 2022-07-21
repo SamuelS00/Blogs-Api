@@ -1,4 +1,6 @@
 const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
 const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
@@ -99,16 +101,43 @@ const destroy = async (id, userId) => {
   if (post.dataValues.userId !== userId) throw Unauthorized('Unauthorized user');
 
   await sequelize.transaction(async (t) => {
-      await PostCategory.destroy(
-        { where: { postId: id } },
-        { transaction: t },
-      );
+    await PostCategory.destroy(
+      { where: { postId: id } },
+      { transaction: t },
+    );
 
-      await BlogPost.destroy(
-        { where: { id } },
-        { transaction: t },
-      );
+    await BlogPost.destroy(
+      { where: { id } },
+      { transaction: t },
+    );
   });
 };
 
-module.exports = { create, getAll, getById, update, destroy, getByUserId };
+const search = async (q) => {
+  const searchedPost = await BlogPost.findAll(
+    { 
+      where: {
+        [Op.or]: [
+          { title: { [Op.like]: `%${q}%` } },
+          { content: { [Op.like]: `%${q}%` } },
+        ],
+      },
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
+    },
+  );
+
+  return searchedPost;
+};
+
+module.exports = { 
+  create,
+  getAll,
+  getById,
+  update,
+  destroy,
+  getByUserId,
+  search,
+};
