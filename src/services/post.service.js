@@ -7,10 +7,15 @@ const sequelize = new Sequelize(config.development);
 const { BlogPost, PostCategory, Category, User } = require('../database/models/index');
 
 const { NotFound, Unauthorized } = require('../errors/index');
-const { replyMessages: { FIELDS_ARE_MISSING } } = require('../helpers');
 const { validateBody } = require('../helpers/validateBody');
-const { newPostSchema, updatePostSchema } = require('../utils/joi.schemas');
 const { validateCategoryIds } = require('./categorie.service');
+const { newPostSchema, updatePostSchema } = require('../utils/joi.schemas');
+
+const { 
+  FIELDS_ARE_MISSING,
+  POST_NOT_EXIST,
+  UNAUTHORIZED_USER,
+} = require('../helpers/replyMessages');
 
 const getAll = async () => {
   const posts = await BlogPost.findAll(
@@ -36,7 +41,7 @@ const getById = async (id) => {
     },
   );
 
-  if (!post) throw NotFound('Post does not exist');
+  if (!post) throw NotFound(POST_NOT_EXIST);
 
   return post;
 };
@@ -48,7 +53,7 @@ const getByUserId = async (userId) => {
     },
   );
 
-  if (!post) throw NotFound('Post does not exist');
+  if (!post) throw NotFound(POST_NOT_EXIST);
 
   return post;
 };
@@ -83,7 +88,7 @@ const update = async (id, userId, title, content) => {
   validateBody(updatePostSchema, { title, content }, FIELDS_ARE_MISSING);
 
   const post = await getById(id);  
-  if (post.user.id !== userId) throw Unauthorized('Unauthorized user');
+  if (post.user.id !== userId) throw Unauthorized(UNAUTHORIZED_USER);
 
   await BlogPost.update(
     { title, content }, 
@@ -98,7 +103,7 @@ const update = async (id, userId, title, content) => {
 const destroy = async (id, userId) => {  
   const post = await getById(id); 
 
-  if (post.dataValues.userId !== userId) throw Unauthorized('Unauthorized user');
+  if (post.dataValues.userId !== userId) throw Unauthorized(UNAUTHORIZED_USER);
 
   await sequelize.transaction(async (t) => {
     await PostCategory.destroy(
