@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 
 const errorMiddleware = require('./middleware/error.middleware');
 const { authRouter, userRouter, categorieRouter, postRouter } = require('./routes/index');
@@ -7,7 +6,6 @@ const { authRouter, userRouter, categorieRouter, postRouter } = require('./route
 const app = express();
 
 app.use(express.json());
-app.use(bodyParser.json());
 
 app.use('/login', authRouter);
 app.use('/user', userRouter);
