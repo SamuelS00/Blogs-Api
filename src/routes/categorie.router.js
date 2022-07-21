@@ -3,9 +3,9 @@ const rescue = require('express-rescue');
 
 const categorieRouter = express.Router();
 const categorieController = require('../controllers/categorie.controller');
+const authMiddleware = require('../middleware/auth.middleware');
 
-categorieRouter.get('/', rescue(categorieController.getAll));
-
-categorieRouter.post('/', rescue(categorieController.create));
+categorieRouter.get('/', authMiddleware, rescue(categorieController.getAll));
+categorieRouter.post('/', authMiddleware, rescue(categorieController.create));
 
 module.exports = categorieRouter;
