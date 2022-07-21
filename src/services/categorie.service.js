@@ -1,7 +1,9 @@
 const { Category } = require('../database/models/index');
-const BadRequest = require('../errors/badRequest');
+
+const { BadRequest } = require('../errors/index');
 const { validateBody } = require('../helpers/validateBody');
 const { newCategorieSchema } = require('../utils/joi.schemas');
+const { CATEGORIES_NOT_FOUND } = require('../helpers/replyMessages');
 
 const getAll = async () => {
   const categories = await Category.findAll();
@@ -22,7 +24,7 @@ const validateCategoryIds = async (categoryIds) => {
   const resultCategories = await Promise.all(categories)
     .then((values) => values.every((v) => v !== null));
 
-  if (!resultCategories) throw BadRequest('"categoryIds" not found');
+  if (!resultCategories) throw BadRequest(CATEGORIES_NOT_FOUND);
 };
 
 module.exports = { create, getAll, validateCategoryIds };
