@@ -1,16 +1,13 @@
 const { User } = require('../database/models/index');
-const { createToken } = require('./JWT.service');
-const BadRequest = require('../errors/badRequest');
+
+const { createToken } = require('./jwt.service');
+const { BadRequest } = require('../errors/index');
 const { validateBody } = require('../helpers/validateBody');
-const replyMessages = require('../helpers/replyMessages');
+const { FIELDS_ARE_MISSING, INVALID_FIELDS } = require('../helpers/replyMessages');
 const { loginSchema } = require('../utils/joi.schemas');
 
 const login = async (email, password) => {
-  validateBody(
-    loginSchema, 
-    { email, password }, 
-    replyMessages.FIELDS_ARE_MISSING,
-  );
+  validateBody(loginSchema, { email, password }, FIELDS_ARE_MISSING);
 
   const user = await User.findOne(
     { 
@@ -19,7 +16,7 @@ const login = async (email, password) => {
     },
   );
 
-  if (!user) throw BadRequest(replyMessages.INVALID_FIELDS);
+  if (!user) throw BadRequest(INVALID_FIELDS);
 
   return createToken(user);
 };
