@@ -3,19 +3,14 @@ const rescue = require('express-rescue');
 
 const postRouter = express.Router();
 const postController = require('../controllers/post.controller');
+const authMiddleware = require('../middleware/auth.middleware');
 
-postRouter.get('/', rescue(postController.getAll));
-
-postRouter.get('/search', rescue(postController.search));
-
-postRouter.get('/:id', rescue(postController.getById));
-
-postRouter.post('/', rescue(postController.create));
-
-postRouter.put('/:id', rescue(postController.update));
-
-postRouter.delete('/:id', rescue(postController.destroy));
-
-// postRouter.search('/', rescue(postController.search)); o teste não cobre...
+postRouter.get('/', authMiddleware, rescue(postController.getAll));
+postRouter.get('/search', authMiddleware, rescue(postController.search));
+postRouter.get('/:id', authMiddleware, rescue(postController.getById));
+postRouter.post('/', authMiddleware, rescue(postController.create));
+postRouter.put('/:id', authMiddleware, rescue(postController.update));
+postRouter.delete('/:id', authMiddleware, rescue(postController.destroy));
+// postRouter.search('/', authMiddleware, rescue(postController.search)); o teste não cobre...
 
 module.exports = postRouter;
