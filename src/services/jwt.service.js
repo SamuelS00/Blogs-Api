@@ -1,14 +1,14 @@
 require('dotenv').config();
+
 const jwt = require('jsonwebtoken');
 const { User } = require('../database/models/index');
 
 const { JWT_SECRET } = process.env;
-const UnauthorizedError = require('../errors/unauthorized');
-
-const { replyMessages } = require('../helpers/index');
+const { Unauthorized } = require('../errors/index');
+const { TOKEN_NOT_FOUND, TOKEN_EXPIRED } = require('../helpers/replyMessages');
 
 const validateToken = async (token) => {
-    if (!token) throw UnauthorizedError(replyMessages.TOKEN_NOT_FOUND);
+    if (!token) throw Unauthorized(TOKEN_NOT_FOUND);
 
     try {
         const { data } = jwt.verify(token, JWT_SECRET);
@@ -18,11 +18,11 @@ const validateToken = async (token) => {
             { attributes: { exclude: ['password'] } },
         );
     
-        if (!user) throw UnauthorizedError(replyMessages.TOKEN_EXPIRED);
+        if (!user) throw Unauthorized(TOKEN_EXPIRED);
         
         return user;
     } catch (err) {
-        throw UnauthorizedError(replyMessages.TOKEN_EXPIRED);
+        throw Unauthorized(TOKEN_EXPIRED);
     }
 };
 
