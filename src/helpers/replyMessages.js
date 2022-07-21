@@ -6,6 +6,9 @@ const replyMessages = {
   INVALID_FIELDS: 'Invalid fields',
   USER_ALREADY_EXISTS: 'User already registered',
   USER_NOT_EXIST: 'User does not exist',
+  CATEGORIES_NOT_FOUND: '"categoryIds" not found',
+  POST_NOT_EXIST: 'Post does not exist',
+  UNAUTHORIZED_USER: 'Unauthorized user',
 };
 
 module.exports = replyMessages;
