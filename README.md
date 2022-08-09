@@ -1,5 +1,7 @@
 # Blogs Api
 
+![1660032195315](image/README/1660032195315.png)
+
 ## About
 
 Application in Node.js using the sequelize package to make a CRUD of posts.
