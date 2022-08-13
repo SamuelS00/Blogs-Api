@@ -12,6 +12,15 @@ The relationship between user and post is worked, so user and login are required
 
 Route protection with jwt token is also worked.
 
+## Learnings
+
+* Structuring an application in layer
+* Delegate specific responsibilities to this layer
+* Understand and apply REST standards
+* Write signatures for intuitive and easily understandable APIs.
+* work with user authentication with jwt
+* validations of data received through joi
+
 ## Technologies Used
 
 * Node.js
@@ -32,7 +41,7 @@ Route protection with jwt token is also worked.
 git@github.com:SamuelS00/Blogs-Api.git
 ```
 
-* *After cloning the respository, install the dependencies:*
+* *After cloning the repository, install the dependencies:*
 
 ```
 yarn install
@@ -44,7 +53,7 @@ or
 npm install
 ```
 
-* *Then proceed with the creation of your .Env file to store your environment variables, this were the ones that i used:*
+* *Then proceed with the creation of your .Env file to store your environment variables, just like:*
 
 ```
 MYSQL_HOST=localhost
@@ -71,7 +80,7 @@ docker exec -it blogs_api bash
 
 ### Usage
 
-* run prestat command to populate the tables in the database:
+* run prestart command to populate the tables in the database:
 
 ```
 npm run prestart
@@ -97,4 +106,4 @@ npm test
 
 ### Documentation
 
-* To access the api documentation go to https://localhost:3000/api-docs;
+* To access the API documentation go to https://localhost:3000/api-docs;
